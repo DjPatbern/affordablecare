@@ -5,7 +5,8 @@ AffordableCare is a healthcare service-discovery and appointment-booking platfor
 ## Required stack
 
 - Use the installed Next.js App Router version. Read the matching documentation under `node_modules/next/dist/docs/` before using framework APIs.
-- Use React, TypeScript strict mode, and Tailwind CSS.
+- Use React, TypeScript strict mode, and the repository's installed Tailwind CSS v4 configuration.
+- Style utility-first with Tailwind. Limit custom CSS to global tokens, font/accessibility foundations, or behavior that Tailwind cannot express clearly; do not add a parallel styling framework without a recorded team decision.
 - Do not use `any`; prefer explicit domain types and validated unknown input.
 - Use PostgreSQL with Prisma ORM for persistent application data.
 - Pages and layouts are Server Components by default. Add `"use client"` only when browser state, events, or client-only APIs require it.

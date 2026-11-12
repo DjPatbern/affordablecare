@@ -10,6 +10,14 @@
 
 Ownership indicates the driver, not the only reviewer. Backend owners review shared schemas and migrations together; Victor reviews API response shapes against frontend needs.
 
+## Agreed technical foundation
+
+- Next.js App Router with strict TypeScript.
+- Tailwind CSS v4 using a utility-first component approach.
+- PostgreSQL with Prisma ORM.
+- Server Components by default, with Client Components limited to interactive browser UI.
+- No additional component library during Week 04; shared primitives are built from the documented Tailwind tokens and variants.
+
 ## Week 04 issue set
 
 | Issue | Owner | Outcome |

@@ -72,9 +72,11 @@ Do not use green alone to indicate availability or success. Pair color with text
 
 ## Shared UI conventions
 
-- Tailwind CSS utilities are the primary styling approach.
+- **Styling decision:** use the repository's installed Tailwind CSS v4 setup for all application styling.
+- Follow a utility-first approach. Custom CSS is limited to global design tokens, font foundations, accessibility defaults, and behavior that Tailwind utilities cannot express clearly.
 - Reusable variants are defined in components, not repeated as long class strings across routes.
 - No additional UI kit is required for Week 04. Accessible primitives may later use Radix UI if dialogs or complex menus justify it.
+- Do not introduce Bootstrap, CSS Modules, styled-components, or another parallel styling system without a documented team decision.
 - Primary buttons use forest fill with white text; secondary buttons use a transparent surface and forest border.
 - Links are underlined in body content. Navigation links may use weight and active indicators instead.
 - Focus rings use a two-layer treatment that remains visible on light and dark surfaces.
