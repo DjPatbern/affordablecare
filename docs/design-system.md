@@ -1,6 +1,7 @@
 # AffordableCare Design Theme and Branding
 
-**Owner:** Victor Patrick (`DjPatbern`)  
+**Owner:** Victor Patrick (`DjPatbern`)
+
 **Visual direction:** warm editorial healthcare, inspired by the spacious Branda service-ordering layout supplied by the team
 
 AffordableCare adopts the reference's calm ivory canvas, deep green typography, generous whitespace, editorial serif headlines, and rounded feature panels. The identity is adapted for healthcare access: reassuring rather than promotional, clinically clear rather than decorative, and never dependent on imagery to communicate essential information.

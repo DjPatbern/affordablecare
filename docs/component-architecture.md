@@ -1,7 +1,9 @@
 # AffordableCare Component Architecture
 
-**Owner:** Victor Patrick (`DjPatbern`)  
-**Planning window:** Week 04  
+**Owner:** Victor Patrick (`DjPatbern`)
+
+**Planning window:** Week 04
+
 **Status:** Approved initial architecture
 
 ## MVP routes

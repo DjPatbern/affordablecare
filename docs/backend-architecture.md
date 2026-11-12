@@ -1,7 +1,9 @@
 # AffordableCare Backend and Database Architecture
 
-**Primary owners:** Chioma Asiama (`enyinne`) and Preston Machanga (`Press2027`)  
-**Frontend contract owner:** Victor Patrick (`DjPatbern`)  
+**Primary owners:** Chioma Asiama (`enyinne`) and Preston Machanga (`Press2027`)
+
+**Frontend contract owner:** Victor Patrick (`DjPatbern`)
+
 **Database decision:** PostgreSQL with Prisma ORM
 
 This document is the implementation handoff for the database, API, authentication, authorization, and booking foundations. PostgreSQL is selected because the application depends on strong relationships, transactions, uniqueness constraints, and conflict-safe appointment booking.
