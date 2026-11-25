@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------- ENUMS ----------------
+
+enum UserRole {
+  PATIENT
+  PROVIDER
+  ADMIN
+}
+
+enum ClinicStatus {
+  DRAFT
+  PUBLISHED
+  SUSPENDED
+}
+
+enum ServiceStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AvailabilityStatus {
+  OPEN
+  HELD
+  BOOKED
+  BLOCKED
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+// ---------------- USER ----------------
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  name         String
+  phone        String?
+  passwordHash String?  @map("password_hash")
+  role         UserRole @default(PATIENT)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(6)
+
+  memberships   ProviderMembership[]
+  appointments  Appointment[]        @relation("PatientAppointments")
+  createdSlots  AvailabilitySlot[]   @relation("SlotCreatedBy")
+  cancellations Appointment[]        @relation("AppointmentCancelledBy")
+
+  @@index([role])
+  @@map("users")
+}
+
+// ---------------- CLINIC ----------------
+
+model Clinic {
+  id           String       @id @default(uuid()) @db.Uuid
+  name         String
+  slug         String       @unique
+  description  String?
+  addressLine1 String
+  city         String
+  region       String?
+  country      String
+  phone        String?
+  email        String?
+  timezone     String
+  status       ClinicStatus @default(DRAFT)
+  createdAt    DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime     @updatedAt @db.Timestamptz(6)
+
+  memberships ProviderMembership[]
+  services    Service[]
+
+  @@index([status, city, country])
+  @@map("clinics")
+}
+
+// ---------------- PROVIDER MEMBERSHIP ----------------
+
+model ProviderMembership {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  clinicId  String   @db.Uuid
+  role      String   @default("PROVIDER")
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Restrict)
+  clinic Clinic @relation(fields: [clinicId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, clinicId])
+  @@index([clinicId])
+  @@map("provider_memberships")
+}
+
+// ---------------- SERVICE ----------------
+
+model Service {
+  id              String        @id @default(uuid()) @db.Uuid
+  clinicId        String        @db.Uuid
+  name            String
+  slug            String
+  category        String
+  description     String
+  durationMinutes Int
+  priceMinor      Int?
+  currency        String?       @db.VarChar(3)
+  status          ServiceStatus @default(DRAFT)
+  createdAt       DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime      @updatedAt @db.Timestamptz(6)
+
+  clinic       Clinic             @relation(fields: [clinicId], references: [id], onDelete: Restrict)
+  availability AvailabilitySlot[]
+  appointments Appointment[]
+
+  @@unique([clinicId, slug])
+  @@index([status, category])
+  @@index([clinicId, status])
+  @@map("services")
+}
+
+// ---------------- AVAILABILITY SLOT ----------------
+
+model AvailabilitySlot {
+  id          String             @id @default(uuid()) @db.Uuid
+  serviceId   String             @db.Uuid
+  startsAt    DateTime           @db.Timestamptz(6)
+  endsAt      DateTime           @db.Timestamptz(6)
+  status      AvailabilityStatus @default(OPEN)
+  createdById String             @db.Uuid
+  createdAt   DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime           @updatedAt @db.Timestamptz(6)
+
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  createdBy User    @relation("SlotCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+
+  appointments Appointment[]
+
+  @@index([serviceId, startsAt, status])
+  @@map("availability_slots")
+}
+
+// ---------------- APPOINTMENT ----------------
+
+model Appointment {
+  id            String            @id @default(uuid()) @db.Uuid
+  patientId     String            @db.Uuid
+  serviceId     String            @db.Uuid
+  slotId        String            @db.Uuid
+  status        AppointmentStatus @default(SCHEDULED)
+  patientNote   String?
+  cancelledAt   DateTime?         @db.Timestamptz(6)
+  cancelledById String?           @db.Uuid
+  createdAt     DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime          @updatedAt @db.Timestamptz(6)
+
+  patient     User             @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Restrict)
+  service     Service          @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  slot        AvailabilitySlot @relation(fields: [slotId], references: [id], onDelete: Restrict)
+  cancelledBy User?            @relation("AppointmentCancelledBy", fields: [cancelledById], references: [id], onDelete: Restrict)
+
+  @@index([patientId, createdAt])
+  @@index([serviceId, status])
+  @@index([slotId, status])
+  @@map("appointments")
+}
