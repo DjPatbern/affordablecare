@@ -8,6 +8,13 @@ import {
 import { ServiceCard } from "@/components/service-card";
 import { PageContainer } from "@/components/ui/page-container";
 import { getFeaturedServices } from "@/lib/services";
+import { publicPageMetadata } from "@/lib/page-metadata";
+
+export const metadata = publicPageMetadata(
+  "AffordableCare | Care within reach",
+  "Explore the AffordableCare preview and see how to compare clinic services, prices, and appointment options.",
+  { home: true },
+);
 
 export default function HomePage() {
   const featuredServices = getFeaturedServices();

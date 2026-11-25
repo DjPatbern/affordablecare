@@ -10,6 +10,7 @@ import {
 } from "@/components/icons";
 import { PageContainer } from "@/components/ui/page-container";
 import { formatPrice, getService, services } from "@/lib/services";
+import { publicPageMetadata } from "@/lib/page-metadata";
 export function generateStaticParams() {
   return services.map((service) => ({ serviceId: service.id }));
 }
@@ -19,8 +20,8 @@ export async function generateMetadata({
   const { serviceId } = await params;
   const service = getService(serviceId);
   return service
-    ? { title: service.name, description: service.description }
-    : { title: "Service not found" };
+    ? publicPageMetadata(service.name, service.description, { index: false })
+    : { title: "Service not found", robots: { index: false } };
 }
 export default async function ServiceDetailPage({
   params,

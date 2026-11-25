@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Sign in",
   description:
     "Sign in to manage AffordableCare appointments and clinic services.",
+  robots: { index: false, follow: true },
 };
 
 export default function LoginPage() {

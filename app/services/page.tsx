@@ -1,13 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { SearchIcon } from "@/components/icons";
 import { ServiceCard } from "@/components/service-card";
 import { PageContainer } from "@/components/ui/page-container";
 import { services } from "@/lib/services";
-export const metadata: Metadata = {
-  title: "Find healthcare services",
-  description: "Browse published clinic services by category and location.",
-};
+import { publicPageMetadata } from "@/lib/page-metadata";
+
+export const metadata = publicPageMetadata(
+  "Find healthcare services",
+  "Preview the service directory and filter sample clinic listings by category and location.",
+  { index: false },
+);
 export default async function ServicesPage({
   searchParams,
 }: PageProps<"/services">) {
